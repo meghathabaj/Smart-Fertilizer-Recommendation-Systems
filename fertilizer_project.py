@@ -4,11 +4,11 @@
 # -----------------------------
 from flask import Flask, request, jsonify
 import pandas as pd
+from pathlib import Path
 
 app = Flask(__name__)
-
 # ------------------- Load CSV with real soil data -------------------
-CSV_PATH = r"D:\project\crop_recommendation.csv"
+CSV_PATH = Path(__file__).resolve().parent / "Crop_recommendation.csv"
 
 try:
     soil_data = pd.read_csv(CSV_PATH)
@@ -117,6 +117,19 @@ def adjust_fertilizer(N_need, P_need, K_need, crop, temperature, humidity):
     return round(Nf,2), round(Pf,2), round(Kf,2), advice
 
 # ------------------- API Endpoint -------------------
+def get_recommendation(crop, temperature, humidity, city):
+    with app.test_request_context(
+        "/recommend",
+        method="POST",
+        json={
+            "crop": crop,
+            "temperature": temperature,
+            "humidity": humidity,
+            "city": city
+        }
+    ):
+        response, status = recommend()
+        return response.get_json(), status
 @app.route("/recommend", methods=["POST"])
 def recommend():
     data = request.get_json() or {}
