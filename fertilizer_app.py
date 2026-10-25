@@ -7,6 +7,7 @@ import streamlit as st
 import requests
 import os
 from dotenv import load_dotenv
+from fertilizer_project import get_recommendation
 
 load_dotenv()
 
@@ -63,11 +64,9 @@ if st.button("Get Fertilizer Recommendation"):
                 """, unsafe_allow_html=True)
 
             # Backend request
-            backend_url = "http://127.0.0.1:5000/recommend"
-            response = requests.post(backend_url, json={"crop": crop, "temperature": temp, "humidity": humidity, "city": city})
+            data, status = get_recommendation(crop, temp, humidity, city)
 
-            if response.status_code == 200:
-                data = response.json()
+            if status == 200:
 
                 # Fertilizer Card
                 with col_fertilizer:
@@ -105,7 +104,7 @@ if st.button("Get Fertilizer Recommendation"):
                     st.markdown(f"<div style='background-color:#E8F5E9;padding:10px;margin:5px;border-radius:10px;border:1px solid #A5D6A7;'>{item}</div>", unsafe_allow_html=True)
 
             else:
-                st.error("❌ Backend error: " + response.text)
+                st.error("❌ Recommendation error: " + str(data))
 
     except Exception as e:
         st.error(f"⚠ Unable to fetch data or connect to backend.\nError: {e}")
