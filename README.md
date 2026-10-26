@@ -1,5 +1,9 @@
 # 🌱 Smart Fertilizer Recommendation System
 
+## 🌐 Live Demo
+
+[Click Here to View Live Project](https://smart-fertilizer-recommendation-systems-8h9x5upcwbgnvrpbfuurwj.streamlit.app/)
+
 A weather-based fertilizer recommendation system developed using Python, Flask, and Streamlit.
 
 ## Features
